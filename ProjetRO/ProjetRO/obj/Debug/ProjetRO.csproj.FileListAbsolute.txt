@@ -8,3 +8,13 @@ C:\Users\th299374\Desktop\ProjetRO\ProjetRO\obj\Debug\ProjetRO.csproj.CoreCompil
 C:\Users\th299374\Desktop\ProjetRO\ProjetRO\obj\Debug\ProjetRO.exe
 C:\Users\th299374\Desktop\ProjetRO\ProjetRO\obj\Debug\ProjetRO.pdb
 C:\Users\th299374\Desktop\ProjetRO\ProjetRO\obj\Debug\ProjetRO.csproj.AssemblyReference.cache
+C:\Users\tomhu\OneDrive\Documents\GitHub\Projet-Recherche-Operationnelle-S4\ProjetRO\ProjetRO\bin\Debug\ListeComplete.txt
+C:\Users\tomhu\OneDrive\Documents\GitHub\Projet-Recherche-Operationnelle-S4\ProjetRO\ProjetRO\bin\Debug\moinsDe100.txt
+C:\Users\tomhu\OneDrive\Documents\GitHub\Projet-Recherche-Operationnelle-S4\ProjetRO\ProjetRO\bin\Debug\top80.txt
+C:\Users\tomhu\OneDrive\Documents\GitHub\Projet-Recherche-Operationnelle-S4\ProjetRO\ProjetRO\bin\Debug\ProjetRO.exe.config
+C:\Users\tomhu\OneDrive\Documents\GitHub\Projet-Recherche-Operationnelle-S4\ProjetRO\ProjetRO\bin\Debug\ProjetRO.exe
+C:\Users\tomhu\OneDrive\Documents\GitHub\Projet-Recherche-Operationnelle-S4\ProjetRO\ProjetRO\bin\Debug\ProjetRO.pdb
+C:\Users\tomhu\OneDrive\Documents\GitHub\Projet-Recherche-Operationnelle-S4\ProjetRO\ProjetRO\obj\Debug\ProjetRO.csproj.AssemblyReference.cache
+C:\Users\tomhu\OneDrive\Documents\GitHub\Projet-Recherche-Operationnelle-S4\ProjetRO\ProjetRO\obj\Debug\ProjetRO.csproj.CoreCompileInputs.cache
+C:\Users\tomhu\OneDrive\Documents\GitHub\Projet-Recherche-Operationnelle-S4\ProjetRO\ProjetRO\obj\Debug\ProjetRO.exe
+C:\Users\tomhu\OneDrive\Documents\GitHub\Projet-Recherche-Operationnelle-S4\ProjetRO\ProjetRO\obj\Debug\ProjetRO.pdb
