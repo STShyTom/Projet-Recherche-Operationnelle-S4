@@ -39,7 +39,7 @@ namespace ProjetRO
             get => latitude;
             set
             {
-                latitude = value * (Math.PI / 180.0);
+                latitude = value;
             }
         }
 
@@ -48,7 +48,7 @@ namespace ProjetRO
             get => longitude;
             set
             {
-                longitude = value * (Math.PI / 180.0);
+                longitude = value;
             }
         }
     }

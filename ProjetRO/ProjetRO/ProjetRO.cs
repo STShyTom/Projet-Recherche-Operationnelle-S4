@@ -10,13 +10,16 @@ namespace ProjetRO
     {
         static void Main(string[] args)
         {
-            Tournee t = new Tournee(); // Création d'une tournée
+            Gestion g = new Gestion(); // Création de la gestion totale
 
             Console.WriteLine("Top 80 des plus grandes villes de Côte d'Or");
-            t.afficherVilles(); // Affichage sur la console de toutes les villes du top 80
+            g.afficherVilles(); // Affichage sur la console de toutes les villes du top 80
 
             Console.WriteLine("Calcul de distance entre 2 villes");
-            t.AfficherDistance();
+            g.afficherDistance(); // Affichage de la distance entre 2 villes choisies
+
+
+
 
             Console.WriteLine("\n Appuyez sur n'importe quelle touche pour quitter.");
             System.Console.ReadKey();
