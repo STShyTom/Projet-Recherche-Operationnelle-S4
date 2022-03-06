@@ -6,22 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjetRO
 {
-    public class Tournee
+    public class Tournee<Ville> : List<Ville>
     {
-        private Gestion g = new Gestion();
-        private Ville[] villes = g.rentrerVille(); //Liste des villes
-
-        public Tournee(Ville[] tourneeVilles)
-        {
-            this.villes = tourneeVilles;
-        }
-
-        public void TourneeCroissante()
-        {
-            foreach(Ville v in villes)
-            {
-
-            }
-        }
     }
 }
