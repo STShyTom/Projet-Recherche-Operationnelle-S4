@@ -20,6 +20,7 @@ namespace ProjetRO
                 Console.WriteLine("2 : Calculer la distance entre 2 villes choisies");
                 Console.WriteLine("3 : Effectuer une tournée des villes dans l'ordre");
                 Console.WriteLine("4 : Effectuer une tournée des villes aléatoirement");
+                Console.WriteLine("5 : Effectuer une tournée des villes avec la méthode gloutonne de plus proche voisin");
                 Console.WriteLine("0 : Quitter");
 
                 ConsoleKeyInfo touche = Console.ReadKey(); // Lecture de touche
@@ -46,6 +47,11 @@ namespace ProjetRO
                 {
                     g.afficheTourneeAleatoire(t);
                     Console.WriteLine("\nLa distance totale pour réaliser une tournée aléatoire est de " + g.coutTourneeAleatoire(t) + "kms.");
+                }
+                else if(touche.KeyChar == '5')
+                {
+                    g.afficheTourneePlusProcheVoisin(t);
+                    Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne de plus proche voisin est de " + g.coutTourneePlusProcheVoisin(t) + "kms.");
                 }
                 else
                 {

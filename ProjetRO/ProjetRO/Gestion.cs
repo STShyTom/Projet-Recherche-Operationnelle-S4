@@ -104,6 +104,10 @@ namespace ProjetRO
             }
         }
 
+        /////////////////////////////////////////////////////////////////////////
+        ///////////////////////// TOURNEE CROISSANTE ///////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+
         /// <summary>
         /// Création d'une tournée croissante des villes
         /// </summary>
@@ -153,6 +157,10 @@ namespace ProjetRO
             return distanceTotale;
         }
 
+        /////////////////////////////////////////////////////////////////////////
+        ///////////////////////// TOURNEE ALEATOIRE ////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+
         /// <summary>
         /// Méthode qui crée une tournée aléatoire
         /// </summary>
@@ -181,7 +189,7 @@ namespace ProjetRO
             {
                 listeNumeros.Add(v.NumVille);
             }
-            Console.WriteLine("\nTournée croissante : ");
+            Console.WriteLine("\nTournée aléatoire : ");
 
             string affichage = string.Join(",", listeNumeros);
             Console.Write("[" + affichage + "]\n");
@@ -194,7 +202,7 @@ namespace ProjetRO
         /// <returns>La distance totale</returns>
         public double coutTourneeAleatoire(Tournee<Ville> t)
         {
-            t = tourneeAleatoire(); // On récupère la liste des villes  pour la tournée croissante
+            t = tourneeAleatoire(); // On récupère la liste des villes  pour la tournée
             double distanceTotale = 0;
             for (int i = 1; i < t.Count; i++)
             {
@@ -202,6 +210,156 @@ namespace ProjetRO
             }
             distanceTotale += distanceVilles(t[79], t[0]); // Ajout de la distance entre le dernier et le prermier point pour faire un tour complet
             return distanceTotale;
+        }
+
+        /////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////
+        /////////////////////////TP2////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
+
+
+        /////////////////////////////////////////////////////////////////////////
+        ///////////////////// TOURNEE PLUS PROCHE VOISIN ///////////////////////
+        ////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Renvoie la ville l plus proche d'une ville donnée en paramètre
+        /// </summary>
+        /// <param name="s"></param> La ville dont on veut trouver le voisin le plus proche
+        /// <returns>La ville la plus proche</returns>
+        private Ville plusProche(Ville s,List<Ville> estVisite)
+        {
+            Ville plusProche = new Ville();
+            double distanceProche = 9999999999;
+
+            foreach (Ville v in estVisite)
+            {
+                double distance = distanceVilles(s, v); // On calcule la distance ente les villes
+                if (distance < distanceProche) // Si la distance calculée est la plus petite trouvée
+                {
+                    distanceProche = distance; // On stocke la distance
+                    plusProche = v; // On stocke la ville
+                }
+            }
+            return plusProche;
+        }
+
+        /// <summary>
+        /// Méthode qui crée la tournée en effectuant un algorithme glouton de plus proche voisin
+        /// </summary>
+        /// <param name="s"></param> La première ville
+        /// <returns>La tournée complète</returns>
+        private Tournee<Ville> tourneePlusProcheVoisin(Ville s)
+        {
+            Tournee<Ville> tournee = new Tournee<Ville>(); // Création d'une tournée
+            List<Ville> estVisite = new List<Ville>(); // Création liste pour savoir si le sommet est déjà visité
+            estVisite = villes.Cast<Ville>().ToList(); // Conversion du tableau des villes en liste
+            Ville suivant = new Ville();
+
+            tournee.Add(s); // On ajoute la première ville à la tournée
+            estVisite.Remove(s); // On retire la ville de la liste pour dire qu'on l'a visitée
+            while (estVisite.Count > 0) // Tant qu'il reste des éléments dans la liste
+            {
+                suivant = plusProche(s,estVisite); // La ville la plus proche est prise
+                estVisite.Remove(suivant); // On retire la ville de la liste pour dire qu'on l'a visitée
+                tournee.Add(suivant);
+                s = suivant;
+            }
+            return tournee;
+        }
+
+        /// <summary>
+        /// Méthode qui affiche la tournée gloutonne de plus proche voisin
+        /// </summary>
+        /// <param name="t"></param> La tournée
+        public void afficheTourneePlusProcheVoisin(Tournee<Ville> t)
+        {
+            Ville numero1 = villes[0];
+            t = tourneePlusProcheVoisin(numero1); // On récupère la liste des villes pour la tournée de plus proche voisin
+            List<int> listeNumeros = new List<int>();
+            foreach (Ville v in t)
+            {
+                listeNumeros.Add(v.NumVille);
+            }
+            Console.WriteLine("\nTournée gloutonne de plus proche voisin : ");
+
+            string affichage = string.Join(",", listeNumeros);
+            Console.Write("[" + affichage + "]\n");
+        }
+
+        /// <summary>
+        /// Méthode qui calcule la distance totale pour une tournée de plus proche voisin
+        /// </summary>
+        /// <param name="t"></param> La tournée
+        /// <returns>La distance totale</returns>
+        public double coutTourneePlusProcheVoisin(Tournee<Ville> t)
+        {
+            Ville numero1 = villes[0];
+            t = tourneePlusProcheVoisin(numero1); // On récupère la liste des villes pour la tournée
+            double distanceTotale = 0;
+            for (int i = 1; i < t.Count; i++)
+            {
+                distanceTotale += distanceVilles(t[i], t[i - 1]);
+            }
+            distanceTotale += distanceVilles(t[79], t[0]); // Ajout de la distance entre le dernier et le prermier point pour faire un tour complet
+            return distanceTotale;
+        }
+
+        /////////////////////////////////////////////////////////////////////////
+        ///////////////////// TOURNEE INSERTION PROCHE //////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Renvoie les villes les plus éloignées entre elles
+        /// </summary>
+        /// <returns>L'ensemble des deux villes</returns>
+        private List<Ville> plusLoin()
+        {
+            double distanceLoin = 0;
+            List<Ville> list = new List<Ville>();
+
+            foreach (Ville v1 in villes)
+            {
+                foreach (Ville v2 in villes)
+                {
+                    double distance = distanceVilles(v1, v2); // On calcule la distance ente les villes
+                    if (distance > distanceLoin) // Si la distance calculée est la plus grande trouvée
+                    {
+                        distanceLoin = distance; // On stocke la distance
+                        list.RemoveAt(1);
+                        list.RemoveAt(0); // On supprime les villes stokées
+                        list.Add(v1);
+                        list.Add(v2); // On stocke les nouvelles villes
+                    }
+                }
+            }
+            return list;
+        }
+
+        private Tournee<Ville> tourneeInsertionProche()
+        {
+            Tournee<Ville> tournee = new Tournee<Ville>(); // Création d'une tournée
+            List<Ville> estVisite = new List<Ville>(); // Création liste pour savoir si le sommet est déjà visité
+            estVisite = villes.Cast<Ville>().ToList(); // Conversion du tableau des villes en liste
+
+            Ville suivant, v1, v2;
+            List<Ville> loin = new List<Ville>();
+            loin = plusLoin(); // On récupère la liste avec les villes les plus éloignées
+            v1 = loin[0]; 
+            v2 = loin[1]; // v1 et v2 sont les plus loins
+            tournee.Add(v1);
+            tournee.Add(v2); // Ajout des villes à la tournée
+            estVisite.Remove(v1);
+            estVisite.Remove(v2); // On retire les villes de la liste pour dire qu'on les a visitées
+
+            while(estVisite.Count > 0)
+            {
+                suivant = null;
+            }
+            return tournee;
         }
     }
 }
