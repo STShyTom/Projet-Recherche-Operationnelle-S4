@@ -339,6 +339,11 @@ namespace ProjetRO
             return list;
         }
 
+        /// <summary>
+        /// Méthode qui crée la tournée en effectuant un algorithme glouton d'insertion proche
+        /// </summary>
+        /// <param name="s"></param> La première ville
+        /// <returns>La tournée complète</returns>
         private Tournee<Ville> tourneeInsertionProche()
         {
             Tournee<Ville> tournee = new Tournee<Ville>(); // Création d'une tournée
@@ -360,6 +365,115 @@ namespace ProjetRO
                 suivant = null;
             }
             return tournee;
+        }
+
+        /////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////
+        /////////////////////////TP3////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
+
+
+        /////////////////////////////////////////////////////////////////////////
+        /////////////////////// ECHANGE DE SUCCESSEURS  /////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Fonction de recherche locale 
+        /// </summary>
+        /// <param name="T_entree"></param> La tournée qu'on veut améliorer
+        /// <returns>La tournée améliorée</returns>
+        private Tournee<Ville> recherche_locale(Tournee<Ville> T_entree)
+        {
+            Tournee<Ville> Tcourante = new Tournee<Ville>(); // Création d'une tournée
+            Tcourante = T_entree;
+            bool fini = false;
+            while(fini == false)
+            {
+                fini = true;
+                Tournee<Ville> Tvoisin = new Tournee<Ville>(); // Création de la tournée de voisin
+                Tvoisin = explorationSuccesseursPremierDAbord(Tcourante); // On effectue l'exploration
+                if (coutTournee(Tvoisin)< coutTournee(Tcourante))
+                {
+                    Tcourante = new Tournee<Ville>(Tvoisin); // COPIE
+                    fini = false;
+                }
+            }
+            return Tcourante;
+        }
+
+        /// <summary>
+        /// Méthode qui calcule la distance totale pour une tournée
+        /// </summary>
+        /// <param name="t"></param> La tournée
+        /// <returns>La distance totale</returns>
+        public double coutTournee(Tournee<Ville> t)
+        {
+            double distanceTotale = 0;
+            for (int i = 1; i < t.Count; i++)
+            {
+                distanceTotale += distanceVilles(t[i], t[i - 1]);
+            }
+            distanceTotale += distanceVilles(t[79], t[0]); // Ajout de la distance entre le dernier et le prermier point pour faire un tour complet
+            return distanceTotale;
+        }
+
+        /// <summary>
+        /// Méthode qui effectue une exploration des successeurs en premier d'abord
+        /// </summary>
+        /// <param name="Tcourante"></param> La tournée courante
+        private Tournee<Ville> explorationSuccesseursPremierDAbord(Tournee<Ville> Tcourante)
+        {
+            for (int i = 0; i < Tcourante.Count; i++)
+            {
+                if (distanceVilles(Tcourante[(i - 1+80)%80], Tcourante[i]) + distanceVilles(Tcourante[(i + 1)% 80], Tcourante[(i + 2)% 80]) > distanceVilles(Tcourante[(i-1+80)% 80], Tcourante[(i+1) % 80]) + distanceVilles(Tcourante[i], Tcourante[(i+2) % 80]))
+                {
+                    // Inversion
+                    Ville temp = Tcourante[i];
+                    Tcourante[i] = Tcourante[(i + 1) % 80];
+                    Tcourante[(i + 1) % 80] = temp;
+                }
+            }
+            return Tcourante;
+        }
+
+        /// <summary>
+        /// Méthode qui affiche la tournée de recherche locale
+        /// </summary>
+        /// <param name="t"></param> La tournée
+        public void afficheTourneeRechercheLocale(Tournee<Ville> t)
+        {
+            Ville numero1 = villes[0];
+            t = recherche_locale(tourneePlusProcheVoisin(numero1)); // On récupère la liste des villes pour la recherche locale
+            List<int> listeNumeros = new List<int>();
+            foreach (Ville v in t)
+            {
+                listeNumeros.Add(v.NumVille);
+            }
+            Console.WriteLine("\nTournée de recherche locale : ");
+
+            string affichage = string.Join(",", listeNumeros);
+            Console.Write("[" + affichage + "]\n");
+        }
+
+        /// <summary>
+        /// Méthode qui calcule la distance totale pour une recherche locale
+        /// </summary>
+        /// <param name="t"></param> La tournée
+        /// <returns>La distance totale</returns>
+        public double coutTourneeRechecheLocale(Tournee<Ville> t)
+        {
+            Ville numero1 = villes[0];
+            t = recherche_locale(tourneePlusProcheVoisin(numero1)); // On récupère la liste des villes pour la tournée
+            double distanceTotale = 0;
+            for (int i = 1; i < t.Count; i++)
+            {
+                distanceTotale += distanceVilles(t[i], t[i - 1]);
+            }
+            distanceTotale += distanceVilles(t[79], t[0]); // Ajout de la distance entre le dernier et le prermier point pour faire un tour complet
+            return distanceTotale;
         }
     }
 }

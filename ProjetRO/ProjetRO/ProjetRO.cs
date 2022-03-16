@@ -41,17 +41,22 @@ namespace ProjetRO
                 else if (touche.KeyChar == '3')
                 {
                     g.afficheTourneeCroissante(t);
-                    Console.WriteLine("\nLa distance totale pour réaliser une tournée croissante est de " + g.coutTourneeCroissante(t) + "kms.");
+                    Console.WriteLine("\nLa distance totale pour réaliser une tournée croissante est de " + g.coutTourneeCroissante(t) + "kms."); // Affichage de la tournée croissante
                 }
                 else if(touche.KeyChar == '4')
                 {
                     g.afficheTourneeAleatoire(t);
-                    Console.WriteLine("\nLa distance totale pour réaliser une tournée aléatoire est de " + g.coutTourneeAleatoire(t) + "kms.");
+                    Console.WriteLine("\nLa distance totale pour réaliser une tournée aléatoire est de " + g.coutTourneeAleatoire(t) + "kms."); // Affichage de la tournée aléatoire
                 }
                 else if(touche.KeyChar == '5')
                 {
                     g.afficheTourneePlusProcheVoisin(t);
-                    Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne de plus proche voisin est de " + g.coutTourneePlusProcheVoisin(t) + "kms.");
+                    Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne de plus proche voisin est de " + g.coutTourneePlusProcheVoisin(t) + "kms."); // Arfichage de la tournée du plus proche voisin
+                }
+                else if (touche.KeyChar == '8')
+                {
+                    g.afficheTourneeRechercheLocale(t);
+                    Console.WriteLine("\nLa distance totale pour réaliser une tournée avec la recherche locale est de " + g.coutTourneeRechecheLocale(t) + "kms."); // Arfichage de la tournée de la recherche locale
                 }
                 else
                 {
