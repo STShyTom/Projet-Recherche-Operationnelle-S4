@@ -22,6 +22,8 @@ namespace ProjetRO
                 Console.WriteLine("4 : Effectuer une tournée des villes aléatoirement");
                 Console.WriteLine("5 : Effectuer une tournée des villes avec la méthode gloutonne de plus proche voisin");
                 Console.WriteLine("6 : Effectuer une tournée des villes avec la méthode gloutonne d'insertion proche");
+                Console.WriteLine("7 : Effectuer une tournée des villes avec la méthode gloutonne d'insertion loin");
+                Console.WriteLine("8 : Effectuer une tournée des villes avec la méthode gloutonne de plus proche voisin en recherche locale");
                 Console.WriteLine("0 : Quitter");
 
                 ConsoleKeyInfo touche = Console.ReadKey(); // Lecture de touche
@@ -58,6 +60,11 @@ namespace ProjetRO
                 {
                     g.afficheTourneeInsertionProche(t);
                     Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne d'insertion proche est de " + g.coutTourneeInsertionProche(t) + "kms."); // Arfichage de la tournée d'insertion proche
+                }
+                else if (touche.KeyChar == '7')
+                {
+                    g.afficheTourneeInsertionLoin(t);
+                    Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne d'insertion loin est de " + g.coutTourneeInsertionLoin(t) + "kms."); // Arfichage de la tournée d'insertion proche
                 }
                 else if (touche.KeyChar == '8')
                 {
