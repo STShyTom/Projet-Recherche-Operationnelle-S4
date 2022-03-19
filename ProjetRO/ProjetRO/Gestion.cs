@@ -308,6 +308,86 @@ namespace ProjetRO
             return distanceTotale;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////PLUS PROCHE VOISIN AMELIORE////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Méthode qui calcule la meilleure distance totale pour une tournée de plus proche voisin améliorée
+        /// </summary>
+        /// <param name="t"></param> La tournée
+        /// <returns>La meilleure distance totale</returns>
+        public double calculCoutTourneePlusProcheVoisinAmeliore(Tournee<Ville> t)
+        {
+            double distance = 9999999999999;
+            Ville stockV = new Ville();
+
+            foreach (Ville v in villes)
+            {
+                double distanceTotale = 0;
+                t = tourneePlusProcheVoisin(v); // On récupère la liste des villes pour la tournée
+                for (int i = 1; i < t.Count; i++)
+                {
+                    distanceTotale += distanceVilles(t[i], t[i - 1]);
+                }
+                distanceTotale += distanceVilles(t[79], t[0]); // Ajout de la distance entre le dernier et le prermier point pour faire un tour complet
+
+                if (distanceTotale < distance) // Si le cout total est inférieur à ceux trouvés précedemment
+                {
+                    distance = distanceTotale; // On récupère ce cout
+                    stockV = v;
+                }
+            }
+            return distance;
+        }
+
+        /// <summary>
+        /// Méthode qui permet de déterminer la première ville pour une tournée de plus proche voisin améliorée
+        /// </summary>
+        /// <param name="t"></param> La tournée
+        /// <returns>La première ville</returns>
+        public Ville premiereVilleTourneePlusProcheVoisinAmeliore(Tournee<Ville> t)
+        {
+            double distance = 9999999999999;
+            Ville stockV = new Ville();
+
+            foreach (Ville v in villes)
+            {
+                double distanceTotale = 0;
+                t = tourneePlusProcheVoisin(v); // On récupère la liste des villes pour la tournée
+                for (int i = 1; i < t.Count; i++)
+                {
+                    distanceTotale += distanceVilles(t[i], t[i - 1]);
+                }
+                distanceTotale += distanceVilles(t[79], t[0]); // Ajout de la distance entre le dernier et le prermier point pour faire un tour complet
+
+                if (distanceTotale < distance) // Si le cout total est inférieur à ceux trouvés précedemment
+                {
+                    distance = distanceTotale; // On récupère ce cout
+                    stockV = v;
+                }
+            }
+            return stockV;
+        }
+
+        /// <summary>
+        /// Méthode qui affiche la tournée gloutonne de plus proche voisin améliorée
+        /// </summary>
+        /// <param name="t"></param> La tournée
+        public void afficheTourneePlusProcheVoisinAmeliore(Tournee<Ville> t)
+        {
+            t = tourneePlusProcheVoisin(premiereVilleTourneePlusProcheVoisinAmeliore(t)); // On récupère la liste des villes pour la tournée de plus proche voisin améliorée
+            List<int> listeNumeros = new List<int>();
+            foreach (Ville v in t)
+            {
+                listeNumeros.Add(v.NumVille);
+            }
+            Console.WriteLine("\nTournée gloutonne de plus proche voisin : ");
+
+            string affichage = string.Join(",", listeNumeros);
+            Console.Write("[" + affichage + "]\n");
+        }
+
         /////////////////////////////////////////////////////////////////////////
         ///////////////////// TOURNEE INSERTION PROCHE //////////////////////////
         ////////////////////////////////////////////////////////////////////////
