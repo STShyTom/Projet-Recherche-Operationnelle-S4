@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjetRO
 {
+    // Createur : Thomas Huguenel
     public class Tournee<Ville> : List<Ville>
     {
         private Tournee<Ville> tvoisin;

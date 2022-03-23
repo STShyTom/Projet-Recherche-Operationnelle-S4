@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjetRO
 {
+    // Createur : Thomas Huguenel
     /// <summary>
     /// Classe qui définit une ville 
     /// </summary>

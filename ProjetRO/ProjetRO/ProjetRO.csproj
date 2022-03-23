@@ -43,7 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Gestion.cs" />
+    <Compile Include="GestionTP1.cs" />
+    <Compile Include="GestionTP2.cs" />
+    <Compile Include="GestionTP3.cs" />
     <Compile Include="ProjetRO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tournee.cs" />

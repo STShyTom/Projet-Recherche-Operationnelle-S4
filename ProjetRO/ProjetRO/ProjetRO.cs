@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace ProjetRO
 {
+    // Createur : Thomas Huguenel
     public class ProjetRO
     {
         static void Main(string[] args)
         {
-            Gestion g = new Gestion(); // Création de la gestion totale
+            GestionTP1 gtp1 = new GestionTP1(); // Création de la gestion totale
+            GestionTP2 gtp2 = new GestionTP2();
+            GestionTP3 gtp3 = new GestionTP3();
             Tournee<Ville> t = new Tournee<Ville>(); // Création d'une tournée
 
             while (true)
@@ -25,83 +28,76 @@ namespace ProjetRO
                 Console.WriteLine("0 : Quitter");
 
                 ConsoleKeyInfo touche = Console.ReadKey(); // Lecture de touche
-                if (touche.KeyChar == '0')
+                switch (touche.KeyChar)
                 {
-                    Environment.Exit(0);
-                }
-                else if (touche.KeyChar == '1')
-                {
-                    Console.WriteLine("\nTop 80 des plus grandes villes de Côte d'Or");
-                    g.afficherVilles(); // Affichage sur la console de toutes les villes du top 80
-                }
-                else if (touche.KeyChar == '2')
-                {
-                    Console.WriteLine("\nCalcul de distance entre 2 villes");
-                    g.afficherDistance(); // Affichage de la distance entre 2 villes choisies
-                }
-                else if (touche.KeyChar == '3')
-                {
-                    g.afficheTourneeCroissante(t);
-                    Console.WriteLine("\nLa distance totale pour réaliser une tournée croissante est de " + g.coutTourneeCroissante(t) + "kms."); // Affichage de la tournée croissante
-                }
-                else if (touche.KeyChar == '4')
-                {
-                    g.afficheTourneeAleatoire(t);
-                    Console.WriteLine("\nLa distance totale pour réaliser une tournée aléatoire est de " + g.coutTourneeAleatoire(t) + "kms."); // Affichage de la tournée aléatoire
-                }
-                else if (touche.KeyChar == '5')
-                {
-                    Console.WriteLine("\n \n Quelle tournée gloutonne souhaitez-vous ?");
-                    Console.WriteLine("1 : Effectuer une tournée des villes avec la méthode gloutonne de plus proche voisin");
-                    Console.WriteLine("2 : Effectuer une tournée des villes avec la méthode gloutonne de plus proche voisin amélioré");
-                    Console.WriteLine("3 : Effectuer une tournée des villes avec la méthode gloutonne d'insertion proche");
-                    Console.WriteLine("4 : Effectuer une tournée des villes avec la méthode gloutonne d'insertion loin");
-                    Console.WriteLine("0 : Quitter");
-                    ConsoleKeyInfo touche2 = Console.ReadKey(); // Lecture de touche
-
-                    if (touche2.KeyChar == '0')
-                    {
+                    case '0':
                         Environment.Exit(0);
-                    }
-                    else if (touche2.KeyChar == '1')
-                    {
-                        g.afficheTourneePlusProcheVoisin(t);
-                        Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne de plus proche voisin est de " + g.coutTourneePlusProcheVoisin(t) + "kms."); // Arfichage de la tournée du plus proche voisin
-                    }
-                    else if (touche2.KeyChar == '2')
-                    {
-                        g.afficheTourneePlusProcheVoisinAmeliore(t);
-                        Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne de plus proche voisin améliorée est de " + g.calculCoutTourneePlusProcheVoisinAmeliore(t) + "kms."); // Arfichage de la tournée du plus proche voisin amelioré
-
-                    }
-                    else if (touche2.KeyChar == '3')
-                    {
-                        g.afficheTourneeInsertionProche(t);
-                        Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne d'insertion proche est de " + g.coutTourneeInsertionProche(t) + "kms."); // Arfichage de la tournée d'insertion proche
-                    }
-                    else if (touche2.KeyChar == '4')
-                    {
-                        g.afficheTourneeInsertionLoin(t);
-                        Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne d'insertion loin est de " + g.coutTourneeInsertionLoin(t) + "kms."); // Arfichage de la tournée d'insertion proche
-                    }
+                        break;
+                    case '1':
+                        Console.WriteLine("\nTop 80 des plus grandes villes de Côte d'Or");
+                        gtp1.afficherVilles(); // Affichage sur la console de toutes les villes du top 80
+                        break;
+                    case '2':
+                        Console.WriteLine("\nCalcul de distance entre 2 villes");
+                        gtp1.afficherDistance(); // Affichage de la distance entre 2 villes choisies
+                        break;
+                    case '3':
+                        gtp1.afficheTourneeCroissante(t);
+                        Console.WriteLine("\nLa distance totale pour réaliser une tournée croissante est de " + gtp1.coutTourneeCroissante(t) + "kms."); // Affichage de la tournée croissante
+                        break;
+                    case '4':
+                        gtp1.afficheTourneeAleatoire(t);
+                        Console.WriteLine("\nLa distance totale pour réaliser une tournée aléatoire est de " + gtp1.coutTourneeAleatoire(t) + "kms."); // Affichage de la tournée aléatoire
+                        break;
+                    case '5':
+                        Console.WriteLine("\n \n Quelle tournée gloutonne souhaitez-vous ?");
+                        Console.WriteLine("1 : Effectuer une tournée des villes avec la méthode gloutonne de plus proche voisin");
+                        Console.WriteLine("2 : Effectuer une tournée des villes avec la méthode gloutonne de plus proche voisin amélioré");
+                        Console.WriteLine("3 : Effectuer une tournée des villes avec la méthode gloutonne d'insertion proche");
+                        Console.WriteLine("4 : Effectuer une tournée des villes avec la méthode gloutonne d'insertion loin");
+                        Console.WriteLine("0 : Quitter");
+                        ConsoleKeyInfo touche2 = Console.ReadKey(); // Lecture de touche
+                        switch (touche2.KeyChar)
+                        {
+                            case '0':
+                                Environment.Exit(0);
+                                break;
+                            case '1':
+                                gtp2.afficheTourneePlusProcheVoisin(t);
+                                Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne de plus proche voisin est de " + gtp2.coutTourneePlusProcheVoisin(t) + "kms."); // Arfichage de la tournée du plus proche voisin
+                                break;
+                            case '2':
+                                gtp2.afficheTourneePlusProcheVoisinAmeliore(t);
+                                Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne de plus proche voisin améliorée est de " + gtp2.calculCoutTourneePlusProcheVoisinAmeliore(t) + "kms."); // Arfichage de la tournée du plus proche voisin amelioré
+                                break;
+                            case '3':
+                                gtp2.afficheTourneeInsertionProche(t);
+                                Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne d'insertion proche est de " + gtp2.coutTourneeInsertionProche(t) + "kms."); // Arfichage de la tournée d'insertion proche
+                                break;
+                            case '4':
+                                gtp2.afficheTourneeInsertionLoin(t);
+                                Console.WriteLine("\nLa distance totale pour réaliser une tournée gloutonne d'insertion loin est de " + gtp2.coutTourneeInsertionLoin(t) + "kms."); // Arfichage de la tournée d'insertion proche
+                                break;
+                        }
+                        break;
+                    case '6':
+                        Console.WriteLine("\n \n Quelle recherche locale souhaitez-vous ?");
+                        Console.WriteLine("1 : Effectuer une recherche locale avec échange de successeurs en premier d'abord.");
+                        Console.WriteLine("2 : Effectuer une recherche locale avec échange de successeurs en premier d'abord.");
+                        Console.WriteLine("0 : Quitter");
+                        ConsoleKeyInfo touche3 = Console.ReadKey(); // Lecture de touche
+                        switch (touche3.KeyChar)
+                        {
+                            case '0':
+                                break;
+                            case '1':
+                                gtp3.afficheTourneeRechercheLocale(t);
+                                Console.WriteLine("\nLa distance totale pour réaliser une tournée avec la recherche locale est de " + gtp3.coutTourneeRechecheLocale(t) + "kms."); // Arfichage de la tournée de la recherche locale
+                                break;
+                        }
+                        break;
                 }
-                else if (touche.KeyChar == '6')
-                {
-
-                }
-                else if (touche.KeyChar == '7')
-                {
-
-                }
-                else if (touche.KeyChar == '8')
-                {
-                    g.afficheTourneeRechercheLocale(t);
-                    Console.WriteLine("\nLa distance totale pour réaliser une tournée avec la recherche locale est de " + g.coutTourneeRechecheLocale(t) + "kms."); // Arfichage de la tournée de la recherche locale
-                }
-                else
-                {
-
-                }
+                        
             }
         }
     }
