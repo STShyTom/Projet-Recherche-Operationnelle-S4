@@ -11,6 +11,16 @@ namespace ProjetRO
     {
         private Tournee<Ville> tvoisin;
 
+        private double cout;
+        public double Cout
+        {
+            get => cout;
+            set
+            {
+                cout = value;
+            }
+        }
+
         public Tournee()
         {
 

@@ -46,6 +46,7 @@
     <Compile Include="GestionTP1.cs" />
     <Compile Include="GestionTP2.cs" />
     <Compile Include="GestionTP3.cs" />
+    <Compile Include="GestionTP4.cs" />
     <Compile Include="ProjetRO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tournee.cs" />
