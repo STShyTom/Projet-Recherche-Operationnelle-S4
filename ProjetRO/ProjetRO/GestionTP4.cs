@@ -129,6 +129,33 @@ namespace ProjetRO
         }
 
         /// <summary>
+        /// Méthode qui récupère les 20 meilleurs enfants d'une génération
+        /// </summary>
+        /// <param name="listeTournees"></param> La liste de base
+        /// <returns>La liste des meilleurs enfants</returns>
+        private List<Tournee<Ville>> choisirMeilleursEnfants(List<Tournee<Ville>> listeTournees)
+        {
+            foreach (Tournee<Ville> tournee in listeTournees) // Pour chaque tournée de la liste
+            {
+                tournee.Cout = coutTournee(tournee); // Récupération du cout
+            }
+            List<Tournee<Ville>> top20 = listeTournees.OrderByDescending(o => o.Cout).Take(20).ToList(); // On récupère les 20 meilleures tournées
+            return top20;
+        }
+
+        /// <summary>
+        /// Méthode qui récupère 20 enfants aléatoirement
+        /// </summary>
+        /// <param name="listeTournees"></param> La liste de base
+        /// <returns>Liste de enfants</returns>
+        private List<Tournee<Ville>> choisirEnfantsAleatoire(List<Tournee<Ville>> listeTournees)
+        {
+            Random r = new Random();
+            List<Tournee<Ville>> listeEnfants = listeTournees.OrderBy(x => r.Next()).Take(20).ToList();
+            return listeEnfants;
+        }
+
+        /// <summary>
         /// Méthode qui renvoie deux parents 
         /// </summary>
         /// <param name="listeParents"></param>
@@ -148,17 +175,37 @@ namespace ProjetRO
             List<Tournee<Ville>> list = new List<Tournee<Ville>>();
             list.Add(tournee1);
             list.Add(tournee2);
+            listeParents.Remove(tournee1);
+            listeParents.Remove(tournee2);
             return list;
         }
 
-        private void croisement(List<Tournee<Ville>> list,int pointCroisement)
+        /// <summary>
+        /// Algorithme de croisement entre deux tournées
+        /// </summary>
+        /// <param name="list"></param> Deux parents
+        /// <param name="pointCroisement"></param> Point de croisement
+        /// <returns>Deux enfants</returns>
+        private List<Tournee<Ville>> croisement(List<Tournee<Ville>> list,int pointCroisement)
         {
             Tournee<Ville> tournee1 = list[0]; // Première tournée
             Tournee<Ville> tournee2 = list[1]; // Première tournée
+            //COPIE
+            Tournee<Ville> tournee1dupliquee = new Tournee<Ville>(tournee1);
+            foreach(Ville ville1 in tournee1)
+            {
+                tournee1dupliquee.Add(ville1);
+            }
+            Tournee<Ville> tournee2dupliquee = new Tournee<Ville>(tournee2);
+            foreach (Ville ville2 in tournee2)
+            {
+                tournee2dupliquee.Add(ville2);
+            }
 
             Tournee<Ville> E1 = new Tournee<Ville>();
             Tournee<Ville> E2 = new Tournee<Ville>();
 
+            // Premier remplissage de E
             for(int i = 0; i < pointCroisement; i++)
             {
                 E1.Add(tournee1[i]);
@@ -167,18 +214,83 @@ namespace ProjetRO
             {
                 E2.Add(tournee2[i]);
             }
+
+            // Suppression des villes déjà présentes dans E pour les tournées
+            foreach(Ville v1 in E1) 
+            {
+                tournee2.Remove(v1);
+            }
+            foreach (Ville v2 in E2)
+            {
+                tournee1.Remove(v2);
+            }
+
+            // Sélections des villes
+            Tournee<Ville> temp1 = new Tournee<Ville>();
+            Tournee<Ville> temp2 = new Tournee<Ville>();
+            for (int i = (tournee1.Count) - 1; i >= (tournee1.Count) - pointCroisement; i--)
+            {
+                temp1.Add(tournee1[i]);
+            }
+            for (int i = (tournee2.Count) - 1; i >= (tournee2.Count) - pointCroisement; i--)
+            {
+                temp2.Add(tournee2[i]);
+            }
+            // Inversion
+            temp1.Reverse();
+            temp2.Reverse();
+            // Ajout des villes aux E
+            foreach (Ville vtemp2 in temp2)
+            {
+                E1.Add(vtemp2);
+            }
+            foreach (Ville vtemp1 in temp1)
+            {
+                E2.Add(vtemp1);
+            }
+
+            // Suppression des villes déjà présentes dans E pour les tournées
+            foreach (Ville v1 in E1)
+            {
+                tournee1dupliquee.Remove(v1);
+            }
+            foreach (Ville v2 in E2)
+            {
+                tournee2dupliquee.Remove(v2);
+            }
+            // On complète E
+            foreach(Ville city1 in tournee1dupliquee)
+            {
+                E1.Add(city1);
+            }
+            foreach (Ville city2 in tournee2dupliquee)
+            {
+                E1.Add(city2);
+            }
+
+            List<Tournee<Ville>> liste = new List<Tournee<Ville>>();
+            list.Add(E1);
+            list.Add(E2);
+            return liste;
         }
+
         
         private void algorithmeGenetique()
         {
             int X = 800; // Nombre de solutions de départ
             int generation = 1; // Première génération
             int NBMAX = 50; // Nombre maximal de générations
-            int N = 400; // Nombre de parents sélectionnés
+            int pointCroisement = 10; // Définition du point de croisement pour le croisement
             List<Tournee<Ville>> listeTournees = new List<Tournee<Ville>>(); // Liste des tournées
             for(int i = 0; i<X ; i++)
             {
                 listeTournees.Add(tourneeAleatoire()); // Ajout des tournees à la liste
+            }
+            // Duplication liste tournées pour plus tard
+            List<Tournee<Ville>> listeTourneesDupliquee = new List<Tournee<Ville>>(listeTournees);
+            foreach (Tournee<Ville> t in listeTournees)
+            {
+                listeTourneesDupliquee.Add(t);
             }
 
             List<Tournee<Ville>> listeParents = new List<Tournee<Ville>>(); // Liste des parents choisis
@@ -194,8 +306,42 @@ namespace ProjetRO
                 {
                     listeParents.Add(aleatoire); // On ajoute les parents aléatoires à la liste de parents
                 }
-                // Croisement
+                // Duplication liste parents pour plus tard
+                List<Tournee<Ville>> listeParentDupliquee = new List<Tournee<Ville>>(listeParents);
+                foreach (Tournee<Ville> t in listeParents)
+                {
+                    listeParentDupliquee.Add(t);
+                }
 
+                // Croisement
+                List<Tournee<Ville>> paireParents = new List<Tournee<Ville>>();
+                List<Tournee<Ville>> paireEnfants = new List<Tournee<Ville>>();
+                List<Tournee<Ville>> listeEnfants = new List<Tournee<Ville>>(); // Liste des enfants
+                while (listeParents.Count > 0)
+                {
+                    paireParents = choix2Parents(listeParents); // Choix de 2 parents
+                    paireEnfants = croisement(paireParents, pointCroisement); // Croisement
+                    listeEnfants.Add(paireEnfants[0]);
+                    listeEnfants.Add(paireEnfants[1]); // Ajout des enfants à la liste d'enfants
+                }
+                // Duplication liste enfants pour plus tard
+                List<Tournee<Ville>> listeEnfantDupliquee = new List<Tournee<Ville>>(listeEnfants);
+                foreach (Tournee<Ville> t in listeEnfants)
+                {
+                    listeEnfantDupliquee.Add(t);
+                }
+
+                // Mutation
+                List<Tournee<Ville>> selectionMutation = new List<Tournee<Ville>>();
+                selectionMutation = choisirMeilleursEnfants(listeTournees); // Récupération des 20 meilleurs enfants
+                foreach (Tournee<Ville> enfant in selectionMutation)
+                {
+                    listeTournees.Remove(enfant); // On retire les enfants de la liste de base
+                }
+                foreach (Tournee<Ville> aleatoire in choisirParentsAleatoire(listeTournees)) // Récupération de 200 parents aléatoires
+                {
+                    listeParents.Add(aleatoire); // On ajoute les parents aléatoires à la liste de parents
+                }
             }
         }
     }
