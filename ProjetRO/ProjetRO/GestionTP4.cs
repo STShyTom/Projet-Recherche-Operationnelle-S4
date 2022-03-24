@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Threading;
 
 namespace ProjetRO
 {
@@ -96,11 +97,60 @@ namespace ProjetRO
             return distanceTotale;
         }
 
+        /// <summary>
+        /// Fonction de recherche locale 
+        /// </summary>
+        /// <param name="T_entree"></param> La tournée qu'on veut améliorer
+        /// <returns>La tournée améliorée</returns>
+        private Tournee<Ville> recherche_locale(Tournee<Ville> T_entree)
+        {
+            Tournee<Ville> Tcourante = new Tournee<Ville>(); // Création d'une tournée
+            Tcourante = T_entree;
+            bool fini = false;
+            while (fini == false)
+            {
+                double coutTcourante = coutTournee(Tcourante);
+                fini = true;
+                Tournee<Ville> Tvoisin = new Tournee<Ville>(); // Création de la tournée de voisin
+                Tvoisin = explorationSuccesseursPremierDAbord(Tcourante); // On effectue l'exploration
+                if (coutTournee(Tvoisin) < coutTcourante)
+                {
+                    // COPIE
+                    Tcourante = new Tournee<Ville>(Tvoisin);
+                    foreach (Ville v in Tvoisin)
+                    {
+                        Tcourante.Add(v);
+                    }
+                    fini = false;
+                }
+            }
+            return Tcourante;
+        }
+
+        /// <summary>
+        /// Méthode qui effectue une exploration des successeurs en premier d'abord
+        /// </summary>
+        /// <param name="Tcourante"></param> La tournée courante
+        private Tournee<Ville> explorationSuccesseursPremierDAbord(Tournee<Ville> Tcour)
+        {
+            for (int i = 0; i < Tcour.Count; i++)
+            {
+                if (distanceVilles(Tcour[(i - 1 + 80) % 80], Tcour[i]) + distanceVilles(Tcour[(i + 1) % 80], Tcour[(i + 2) % 80]) > distanceVilles(Tcour[(i - 1 + 80) % 80], Tcour[(i + 1) % 80]) + distanceVilles(Tcour[i], Tcour[(i + 2) % 80]))
+                {
+                    // Inversion
+                    Ville temp = Tcour[i];
+                    Tcour[i] = Tcour[(i + 1) % 80];
+                    Tcour[(i + 1) % 80] = temp;
+                }
+            }
+            return Tcour;
+        }
+
         //////////////////////////////////////////////////////////////////////////
         ////////////////////////////ALGO GENETIQUE////////////////////////////////
         //////////////////////////////////////////////////////////////////////////
 
-        
+
         /// <summary>
         /// Méthode qui récupère les 200 meilleurs parents d'une génération
         /// </summary>
@@ -175,8 +225,6 @@ namespace ProjetRO
             List<Tournee<Ville>> list = new List<Tournee<Ville>>();
             list.Add(tournee1);
             list.Add(tournee2);
-            listeParents.Remove(tournee1);
-            listeParents.Remove(tournee2);
             return list;
         }
 
@@ -190,6 +238,7 @@ namespace ProjetRO
         {
             Tournee<Ville> tournee1 = list[0]; // Première tournée
             Tournee<Ville> tournee2 = list[1]; // Première tournée
+
             //COPIE
             Tournee<Ville> tournee1dupliquee = new Tournee<Ville>(tournee1);
             foreach(Ville ville1 in tournee1)
@@ -274,25 +323,25 @@ namespace ProjetRO
             return liste;
         }
 
-        
-        private void algorithmeGenetique()
+        /// <summary>
+        /// ALGORITHME GENETIQUE
+        /// </summary>
+        /// <returns>La meilleure solution</returns>
+        private Tournee<Ville> algorithmeGenetique()
         {
             int X = 800; // Nombre de solutions de départ
             int generation = 1; // Première génération
-            int NBMAX = 50; // Nombre maximal de générations
+            int NBMAX = 3; // Nombre maximal de générations
             int pointCroisement = 10; // Définition du point de croisement pour le croisement
             List<Tournee<Ville>> listeTournees = new List<Tournee<Ville>>(); // Liste des tournées
-            for(int i = 0; i<X ; i++)
+            Tournee<Ville> tAleatoire = new Tournee<Ville>();
+            for (int i = 0; i<X ; i++)
             {
-                listeTournees.Add(tourneeAleatoire()); // Ajout des tournees à la liste
+                tAleatoire = tourneeAleatoire();
+                listeTournees.Add(tAleatoire); // Ajout des tournees à la liste
+                tAleatoire = null;
             }
-            // Duplication liste tournées pour plus tard
-            List<Tournee<Ville>> listeTourneesDupliquee = new List<Tournee<Ville>>(listeTournees);
-            foreach (Tournee<Ville> t in listeTournees)
-            {
-                listeTourneesDupliquee.Add(t);
-            }
-
+ 
             List<Tournee<Ville>> listeParents = new List<Tournee<Ville>>(); // Liste des parents choisis
             while (generation < NBMAX)
             {
@@ -306,12 +355,9 @@ namespace ProjetRO
                 {
                     listeParents.Add(aleatoire); // On ajoute les parents aléatoires à la liste de parents
                 }
-                // Duplication liste parents pour plus tard
-                List<Tournee<Ville>> listeParentDupliquee = new List<Tournee<Ville>>(listeParents);
-                foreach (Tournee<Ville> t in listeParents)
-                {
-                    listeParentDupliquee.Add(t);
-                }
+
+                // Duplication liste enfants pour plus tard
+                List<Tournee<Ville>> listeParentsDupliquee = new List<Tournee<Ville>>(listeParents);
 
                 // Croisement
                 List<Tournee<Ville>> paireParents = new List<Tournee<Ville>>();
@@ -320,10 +366,13 @@ namespace ProjetRO
                 while (listeParents.Count > 0)
                 {
                     paireParents = choix2Parents(listeParents); // Choix de 2 parents
+                    listeParents.Remove(paireParents[1]);
+                    listeParents.Remove(paireParents[0]);
                     paireEnfants = croisement(paireParents, pointCroisement); // Croisement
                     listeEnfants.Add(paireEnfants[0]);
                     listeEnfants.Add(paireEnfants[1]); // Ajout des enfants à la liste d'enfants
                 }
+
                 // Duplication liste enfants pour plus tard
                 List<Tournee<Ville>> listeEnfantDupliquee = new List<Tournee<Ville>>(listeEnfants);
                 foreach (Tournee<Ville> t in listeEnfants)
@@ -336,13 +385,79 @@ namespace ProjetRO
                 selectionMutation = choisirMeilleursEnfants(listeTournees); // Récupération des 20 meilleurs enfants
                 foreach (Tournee<Ville> enfant in selectionMutation)
                 {
-                    listeTournees.Remove(enfant); // On retire les enfants de la liste de base
+                    listeEnfants.Remove(enfant); // On retire les enfants de la liste de base
                 }
-                foreach (Tournee<Ville> aleatoire in choisirParentsAleatoire(listeTournees)) // Récupération de 200 parents aléatoires
+                foreach (Tournee<Ville> aleatoire in choisirEnfantsAleatoire(listeTournees)) // Récupération de 20 enfants aléatoires
                 {
-                    listeParents.Add(aleatoire); // On ajoute les parents aléatoires à la liste de parents
+                    selectionMutation.Add(aleatoire); // On ajoute les enfants aléatoires à la liste
+                }
+
+                // Recherche locale
+                Tournee<Ville> apresRecherche = new Tournee<Ville>();
+                foreach(Tournee<Ville> enfantChoisi in selectionMutation)
+                {
+                    apresRecherche = recherche_locale(enfantChoisi); // Affectation de la recherche locale
+                    listeEnfants.Add(enfantChoisi); // On remet les enfants dans la liste
+                }
+
+                listeTournees.Clear(); // Vider la liste
+                //On réunit les solutions
+                foreach (Tournee<Ville> tourneesParents in listeParentsDupliquee) // Ajout des parents
+                {
+                    listeTournees.Add(tourneesParents);
+                }
+                foreach (Tournee<Ville> tourneesEnfants in listeEnfants) // Ajout des enfants
+                {
+                    listeTournees.Add(tourneesEnfants);
                 }
             }
+            double distance = 999999999;
+            Tournee<Ville> tourneeGagnante = new Tournee<Ville>();
+            foreach (Tournee<Ville> tournee in listeTournees) // Pour chaque tournée de la liste
+            {
+                tournee.Cout = coutTournee(tournee); // Récupération du cout
+                if(tournee.Cout < distance)
+                {
+                    distance = tournee.Cout;
+                    tourneeGagnante = tournee;
+                }
+            }
+            return tourneeGagnante;
+        }
+
+        // <summary>
+        /// Méthode qui affiche la tournée suite à l'algo génétique
+        /// </summary>
+        /// <param name="t"></param> La tournée
+        public void afficheAlgoGenetique(Tournee<Ville> t)
+        {
+            t = algorithmeGenetique(); // On récupère la liste des villes pour la tournée
+            List<int> listeNumeros = new List<int>();
+            foreach (Ville v in t)
+            {
+                listeNumeros.Add(v.NumVille);
+            }
+            Console.WriteLine("\nTournée d'algo génétique : ");
+
+            string affichage = string.Join(",", listeNumeros);
+            Console.Write("[" + affichage + "]\n");
+        }
+
+        /// <summary>
+        /// Méthode qui calcule la distance totale l'algo génétique
+        /// </summary>
+        /// <param name="t"></param> La tournée
+        /// <returns>La distance totale</returns>
+        public double coutTourneeAlgoGenetique(Tournee<Ville> t)
+        {
+            t = algorithmeGenetique(); // On récupère la liste des villes pour la tournée
+            double distanceTotale = 0;
+            for (int i = 1; i < t.Count; i++)
+            {
+                distanceTotale += distanceVilles(t[i], t[i - 1]);
+            }
+            distanceTotale += distanceVilles(t[79], t[0]); // Ajout de la distance entre le dernier et le prermier point pour faire un tour complet
+            return distanceTotale;
         }
     }
 }

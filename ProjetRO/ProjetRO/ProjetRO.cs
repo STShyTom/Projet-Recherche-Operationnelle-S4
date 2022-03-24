@@ -14,6 +14,7 @@ namespace ProjetRO
             GestionTP1 gtp1 = new GestionTP1(); // Création de la gestion totale
             GestionTP2 gtp2 = new GestionTP2();
             GestionTP3 gtp3 = new GestionTP3();
+            GestionTP4 gtp4 = new GestionTP4();
             Tournee<Ville> t = new Tournee<Ville>(); // Création d'une tournée
 
             while (true)
@@ -25,6 +26,7 @@ namespace ProjetRO
                 Console.WriteLine("4 : Effectuer une tournée des villes aléatoirement");
                 Console.WriteLine("5 : Effectuer une tournée des villes avec une méthode gloutonne");
                 Console.WriteLine("6 : Effectuer une tournée des villes avec la méthode gloutonne de plus proche voisin en recherche locale");
+                Console.WriteLine("7 : Effectuer une tournée des villes avec algo génétique");
                 Console.WriteLine("0 : Quitter");
 
                 ConsoleKeyInfo touche = Console.ReadKey(); // Lecture de touche
@@ -92,9 +94,13 @@ namespace ProjetRO
                                 break;
                             case '1':
                                 gtp3.afficheTourneeRechercheLocale(t);
-                                Console.WriteLine("\nLa distance totale pour réaliser une tournée avec la recherche locale est de " + gtp3.coutTourneeRechecheLocale(t) + "kms."); // Arfichage de la tournée de la recherche locale
+                                Console.WriteLine("\nLa distance totale pour réaliser une tournée avec la recherche locale est de " + gtp3.coutTourneeRechecheLocale(t) + "kms."); // Affichage de la tournée de la recherche locale
                                 break;
                         }
+                        break;
+                    case '7':
+                        gtp4.afficheAlgoGenetique(t);
+                        Console.WriteLine("\nLa distance totale pour réaliser une tournée avec algorithme génétique est de " + gtp4.coutTourneeAlgoGenetique(t) + "kms."); // Affichage
                         break;
                 }
                         
